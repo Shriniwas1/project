@@ -10,7 +10,7 @@ A production-grade analytical platform built for a UK energy utility's power pro
 
 | Deliverable | Target / Reference | Status |
 |---|---|---|
-| **Public GitHub Repository** | `https://github.com/Shriniwas1/kjhwr` | Ready to push (Main branch) |
+| **Public GitHub Repository** | `https://github.com/Shriniwas1/project.git` | Ready to push (Main branch) |
 | **Public Web Deployment** | `https://kjhwr-wind.vercel.app` / `[Pending Deployment - see Section 15]` | Ready for deployment |
 | **Video Demonstration** | `[Pending Recording - see Section 16 for script & outline]` | Script prepared (≤10 min) |
 | **API Documentation (Swagger)** | `http://localhost:8000/docs` | Live in FastAPI |
@@ -248,8 +248,8 @@ wellfound project/
 
 ### Step 1: Clone Repository & Create Virtual Environment
 ```powershell
-git clone https://github.com/Shriniwas1/kjhwr.git
-cd kjhwr
+git clone https://github.com/Shriniwas1/project.git
+cd project
 
 # Create Python virtual environment
 python -m venv .venv
@@ -378,7 +378,7 @@ docker compose down -v
 For the public submission, the platform can be deployed using standard free-tier cloud providers:
 
 ### Frontend on Vercel
-1. Import the repository `https://github.com/Shriniwas1/kjhwr` into Vercel.
+1. Import the repository `https://github.com/Shriniwas1/project.git` into Vercel.
 2. Set root directory to `frontend`.
 3. Set build command: `npm run build`; output directory: `dist`.
 4. Add environment variable:
@@ -430,8 +430,8 @@ To reproduce all verified results in under 5 minutes:
 
 1. **Clone & Setup:**
    ```powershell
-   git clone https://github.com/Shriniwas1/kjhwr.git
-   cd kjhwr
+   git clone https://github.com/Shriniwas1/project.git
+   cd project
    python -m venv .venv
    .\.venv\Scripts\Activate.ps1
    pip install -r backend/requirements.txt
