@@ -14,6 +14,28 @@ async def lifespan(app: FastAPI):
     """Application lifespan context for startup and shutdown routines."""
     # Ensure database tables exist
     await init_db()
+    
+    # Auto-seed January 2026 data on startup if database is empty (e.g. on fresh Render deploys)
+    try:
+        from backend.app.core.database import AsyncSessionLocal
+        from backend.app.models.actual import ActualGeneration
+        from backend.app.services.ingestion_service import IngestionService
+        from sqlalchemy import select, func
+        
+        async with AsyncSessionLocal() as session:
+            count_stmt = select(func.count(ActualGeneration.id))
+            count_res = await session.execute(count_stmt)
+            count = count_res.scalar() or 0
+            if count == 0:
+                import logging
+                logging.getLogger(__name__).info("Database is empty on startup. Automatically seeding January 2026 data from Elexon BMRS...")
+                ingestion_svc = IngestionService(db=session)
+                await ingestion_svc.ingest_january_2026()
+                logging.getLogger(__name__).info("Auto-seeding complete! January 2026 data is ready.")
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"Auto-seeding check encountered non-fatal error: {e}")
+        
     yield
     # Shutdown actions
 
