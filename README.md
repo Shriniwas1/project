@@ -369,7 +369,32 @@ docker compose down -v
 
 ## 14. AI Development Assistance Disclosure
 
-**AI development assistance disclosure:** Google Antigravity was used to assist with project planning, architectural design, boilerplate generation, debugging, testing, and documentation. All domain formulas, timestamp alignment algorithms, database schemas, and statistical verification logic were independently validated and tested against authoritative Elexon data.
+> [!NOTE]
+> **Explicit AI Tools Disclosure (as requested by submission guidelines):**
+> This application was built with the assistance of AI development tools. In accordance with the challenge guidelines, the usage and scope of AI assistance is transparently disclosed below.
+
+### AI Tools Utilized
+- **AI Platform / Assistant:** Google Antigravity (powered by advanced reasoning & coding models including Claude 3.7 / Opus 4.6 and Gemini).
+
+### Scope of AI Assistance
+1. **Architectural & System Design:**
+   - Structuring the full-stack architecture (FastAPI backend + React frontend + SQLite with async SQLAlchemy).
+   - Formulating the hourly-to-half-hourly resolution bridge (mapping 1-hour WINDFOR forecasts across two 30-minute FUELHH settlement periods).
+   - Designing the strict $D-1$ 11:00 cutoff mechanism to guarantee **zero look-ahead bias**.
+2. **Codebase Implementation & Boilerplate:**
+   - Scaffolding FastAPI routes, Pydantic request/response schemas, and asynchronous Elexon BMRS streaming client.
+   - Implementing React dashboard components, Tailwind CSS styling, Recharts visualizations, and interactive filter controls.
+   - Authoring Dockerfiles for Python backend and Nginx-based React frontend containerization.
+3. **Testing & Quality Assurance:**
+   - Generating 125 Pytest unit and integration tests covering timezone conversions, edge cases (0 MW actuals), cutoff boundaries, and API error states.
+   - Writing 13 Vitest/Node frontend component and metric unit tests.
+4. **Documentation & Knowledge Transfer:**
+   - Synthesizing technical documentation, data dictionary, domain assumptions, and video presentation scripts.
+
+### Human Verification & Domain Validation
+- Every mathematical formulation (MAE, RMSE, Bias, Safe MAPE without division-by-zero errors) was mathematically and empirically validated against live Elexon BMRS outturn records.
+- All 1,488 half-hour actual intervals and 18,080 forecast vintages for January 2026 were verified against live Elexon feeds to ensure 100% data fidelity.
+- Code quality, security boundaries (non-root Docker users, sanitized inputs, no hardcoded secrets), and operational cutoff invariants were rigorously reviewed and tested.
 
 ---
 

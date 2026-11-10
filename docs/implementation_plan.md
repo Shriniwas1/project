@@ -149,3 +149,8 @@ This plan adheres strictly to the phased delivery model prescribed in `README.md
 - **Verification / Acceptance**:
   - Clean container startup and verification via curl/browser.
   - All documentation verified against project requirements.
+
+---
+
+## AI Development Assistance Disclosure
+As permitted and requested by the project requirements, AI development tools (Google Antigravity featuring Claude 3.7 / Opus 4.6 and Gemini) were utilized across design, code generation, test scaffolding, and documentation. All domain formulas, timestamp alignment algorithms, database schemas, and statistical verification logic were independently validated and tested against authoritative Elexon data.

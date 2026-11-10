@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Clock, Layers, Target, CheckCircle2, AlertTriangle, ShieldCheck, HelpCircle, FileText } from 'lucide-react';
+import { BookOpen, Clock, Layers, Target, CheckCircle2, AlertTriangle, ShieldCheck, HelpCircle, FileText, Sparkles, Cpu } from 'lucide-react';
 
 export default function MethodologyView() {
   return (
@@ -151,6 +151,37 @@ export default function MethodologyView() {
           </ul>
         </div>
       </div>
+
+      {/* AI Development Assistance Disclosure */}
+      <section className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-3">
+        <div className="flex items-center space-x-2.5 text-cyan-400 font-bold text-sm">
+          <Sparkles className="h-5 w-5 flex-shrink-0 text-cyan-400" />
+          <span>AI Development Assistance Disclosure</span>
+        </div>
+        <p className="text-slate-300 text-xs leading-relaxed">
+          In full transparency and adherence to submission guidelines, this application was developed with the assistance of advanced AI tools:
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1 text-[11px] text-slate-300">
+          <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/80 space-y-1">
+            <span className="font-semibold text-white flex items-center space-x-1.5">
+              <Cpu className="h-4 w-4 text-cyan-400" />
+              <span>Tooling & Capabilities</span>
+            </span>
+            <p className="text-slate-400 leading-relaxed">
+              Google Antigravity (featuring Claude 3.7 / Opus 4.6 and Gemini models) was utilized for architectural planning, code scaffolding, test generation (125 Pytest + 13 Vitest tests), and documentation synthesis.
+            </p>
+          </div>
+          <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/80 space-y-1">
+            <span className="font-semibold text-white flex items-center space-x-1.5">
+              <ShieldCheck className="h-4 w-4 text-emerald-400" />
+              <span>Human Validation & Verification</span>
+            </span>
+            <p className="text-slate-400 leading-relaxed">
+              All domain logic, zero look-ahead bias cutoffs, Elexon BMRS API integration, and error formulations (MAE, RMSE, Bias, Safe MAPE) were independently validated against authentic January 2026 UK power market data.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

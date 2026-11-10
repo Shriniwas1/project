@@ -77,3 +77,6 @@ Thumbs.db
 logs/
 *.log
 
+
+# Internal Project Notes
+PROJECT_EXPLANATION.md

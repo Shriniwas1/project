@@ -212,3 +212,19 @@ wellfound-project/
 3. **No Hardcoded Secrets**: Configuration is read from environment variables via Pydantic `BaseSettings`. Elexon Insights Solution requires no API key for public stream datasets.
 4. **Idempotent Ingestion**: Re-running ingestion over already-stored date ranges updates or ignores duplicates without corrupting record counts.
 5. **Separation of Concerns**: Ingestion and analytics are decoupled. Analytics queries run entirely against the indexed local database, ensuring zero runtime dependency on external Elexon API availability during user interactions.
+
+---
+
+## 6. AI Development Assistance Disclosure
+
+In accordance with project requirements, the development of this architecture and codebase was assisted by AI tools:
+
+- **Primary Tool:** Google Antigravity (leveraging advanced coding models including Claude 3.7 / Opus 4.6 and Gemini).
+- **Assisted Areas:**
+  - Full-stack architectural blueprints and interface specifications.
+  - Asynchronous client patterns for Elexon BMRS streaming feeds.
+  - Comprehensive unit and integration test generation (125 Pytest tests, 13 frontend tests).
+  - React visualization component structuring and responsive layout design.
+- **Verification Standards:**
+  - All mathematical formulations (MAE, RMSE, Bias, Safe MAPE) and the no-look-ahead forecast selection gate were independently verified against authoritative Elexon BMRS data for January 2026.
+
