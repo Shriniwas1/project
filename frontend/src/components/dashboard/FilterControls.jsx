@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Clock, RefreshCw, SlidersHorizontal, Info, RotateCcw, ChevronDown } from 'lucide-react';
+import { Calendar, Clock, RefreshCw, SlidersHorizontal, Info, RotateCcw, AlertTriangle } from 'lucide-react';
 
 export default function FilterControls({
   startDate,
@@ -32,6 +32,7 @@ export default function FilterControls({
   };
 
   const isDefaultFilters = startDate === '2026-01-01' && endDate === '2026-01-07' && decisionCutoff === '11:00';
+  const isOutsideJanuary = (startDate && !startDate.startsWith('2026-01')) || (endDate && !endDate.startsWith('2026-01'));
 
   return (
     <section className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
@@ -45,15 +46,18 @@ export default function FilterControls({
             <h2 className="text-base font-semibold text-white tracking-tight">
               Procurement Decision Window
             </h2>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-950 border border-cyan-800/70 text-cyan-300">
+              January 2026 Scope
+            </span>
           </div>
           <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
-            Select the physical delivery dates you wish to evaluate. Each day's forecast is filtered to only include predictions published prior to your D-1 decision cutoff, preventing look-ahead bias.
+            Select the physical delivery dates you wish to evaluate. The verified dataset covers <strong className="text-slate-200">January 1 to 31, 2026</strong>. Click any preset below for instant evaluation.
           </p>
         </div>
 
         {/* Quick Range Presets */}
         <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-[11px] font-medium text-slate-400 mr-1.5 uppercase tracking-wider">Presets:</span>
+          <span className="text-[11px] font-medium text-slate-400 mr-1.5 uppercase tracking-wider">Quick Presets:</span>
           {presets.map((p) => {
             const isSelected = startDate === p.start && endDate === p.end;
             return (
@@ -75,6 +79,30 @@ export default function FilterControls({
         </div>
       </div>
 
+      {/* Helpful banner if user selected dates outside January 2026 */}
+      {isOutsideJanuary && (
+        <div className="bg-amber-950/40 border border-amber-800/80 rounded-xl p-3.5 text-xs text-amber-200 flex items-start space-x-3">
+          <AlertTriangle className="h-5 w-5 text-amber-400 flex-shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <p className="font-semibold text-amber-300">
+              Selected dates are outside the January 2026 project scope
+            </p>
+            <p className="text-[11px] text-amber-200/90 leading-relaxed">
+              The project dataset specifically covers <strong>January 2026 (2026-01-01 to 2026-01-31)</strong>. Dates in November (<code className="font-mono bg-amber-950 px-1 py-0.5 rounded">2026-11-xx</code>) have no ingested data.
+            </p>
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={handleReset}
+                className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition-colors text-xs"
+              >
+                <span>Switch to January 1–7, 2026 (Live Data)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main filter inputs grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Start Date */}
@@ -84,7 +112,7 @@ export default function FilterControls({
               <Calendar className="h-3.5 w-3.5 text-cyan-400" />
               <span>Start Delivery Date</span>
             </span>
-            <span className="text-[11px] text-slate-500 font-normal">UK Local (GMT)</span>
+            <span className="text-[11px] text-cyan-400/90 font-medium">YYYY-MM-DD</span>
           </label>
           <div className="relative">
             <input
@@ -96,7 +124,7 @@ export default function FilterControls({
               className="w-full bg-slate-950/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all font-sans"
             />
           </div>
-          <p className="text-[11px] text-slate-500">First delivery interval: 00:00 UTC</p>
+          <p className="text-[11px] text-slate-500">First interval: 00:00 UTC (SP 1)</p>
         </div>
 
         {/* End Date */}
@@ -106,7 +134,7 @@ export default function FilterControls({
               <Calendar className="h-3.5 w-3.5 text-cyan-400" />
               <span>End Delivery Date</span>
             </span>
-            <span className="text-[11px] text-slate-500 font-normal">Inclusive</span>
+            <span className="text-[11px] text-cyan-400/90 font-medium">YYYY-MM-DD</span>
           </label>
           <div className="relative">
             <input
@@ -118,7 +146,7 @@ export default function FilterControls({
               className="w-full bg-slate-950/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all font-sans"
             />
           </div>
-          <p className="text-[11px] text-slate-500">Final delivery interval: 23:30 UTC</p>
+          <p className="text-[11px] text-slate-500">Final interval: 23:30 UTC (SP 48)</p>
         </div>
 
         {/* Decision Cutoff Time */}
@@ -168,7 +196,7 @@ export default function FilterControls({
               <button
                 type="button"
                 onClick={handleReset}
-                title="Reset to default (Jan 1–7 at 11:00)"
+                title="Reset to default (Jan 1–7, 2026 at 11:00)"
                 className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center justify-center"
               >
                 <RotateCcw className="h-4 w-4" />
