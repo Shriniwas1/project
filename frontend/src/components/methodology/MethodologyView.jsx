@@ -1,123 +1,152 @@
 import React from 'react';
-import { ShieldAlert, Clock, Layers, Target, HelpCircle, CheckCircle, AlertTriangle } from 'lucide-react';
+import { BookOpen, Clock, Layers, Target, CheckCircle2, AlertTriangle, ShieldCheck, HelpCircle, FileText } from 'lucide-react';
 
 export default function MethodologyView() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       {/* Title */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg">
-        <h1 className="text-xl font-bold text-white flex items-center space-x-2">
-          <ShieldAlert className="h-5 w-5 text-cyan-400" />
-          <span>Procurement Methodology & System Scope</span>
-        </h1>
-        <p className="text-xs text-slate-400 mt-1">
-          Architectural principles, mathematical definitions, and operational constraints for UK wind forecast evaluation
-        </p>
-      </div>
+      <section className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-7 shadow-xl space-y-3">
+        <div className="flex items-center space-x-3">
+          <div className="p-2 rounded-xl bg-cyan-950/80 border border-cyan-800/60 text-cyan-400">
+            <BookOpen className="h-6 w-6" />
+          </div>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+              Procurement Methodology & Market Framework
+            </h1>
+            <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
+              Standard operating definitions, timestamp alignment logic, error formulations, and operational boundaries governing this intelligence platform.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Scope Disclaimer Box */}
-      <div className="bg-amber-950/20 border border-amber-800/60 rounded-xl p-5 text-xs text-amber-200/90 space-y-2">
+      <section className="bg-amber-950/20 border border-amber-800/60 rounded-2xl p-6 text-xs text-amber-200/90 space-y-3 shadow-lg">
         <div className="flex items-center space-x-2 text-amber-400 font-bold text-sm">
-          <AlertTriangle className="h-4 w-4" />
-          <span>Procurement Intelligence System Boundary</span>
+          <AlertTriangle className="h-5 w-5 flex-shrink-0" />
+          <span>Operational Boundary Notice for Procurement Desks</span>
         </div>
         <p className="leading-relaxed text-[12px]">
-          This application is a <strong>specialized wind forecast evaluation and accuracy verification tool</strong> designed to help utility procurement desks analyze historical day-ahead forecast quality against actual delivery outturns. It does <strong>not</strong> forecast electricity demand, optimize thermal/hydro assets, or calculate net utility procurement positions and market cashout prices.
+          This application is a <strong>specialized wind generation forecast evaluation and verification intelligence platform</strong> built for electricity procurement analysts. Its mission is to quantify the historical accuracy and directional bias of day-ahead forecasts issued by National Grid ESO.
         </p>
-      </div>
+        <p className="leading-relaxed text-[12px] text-amber-300/80">
+          <strong>Explicit Boundary:</strong> It does <em>not</em> forecast customer electricity demand, model thermal/hydro plant dispatch, or execute financial trades. Total procurement volumes and net system cash-out exposure depend on total utility load and other generation assets outside this platform's wind-only scope.
+        </p>
+      </section>
 
+      {/* 4 Core Pillars Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-        {/* 1. Decision Cutoff & Vintage Selection */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg space-y-3">
-          <div className="flex items-center space-x-2 font-bold text-slate-200 text-sm border-b border-slate-800 pb-2">
-            <Clock className="h-4 w-4 text-amber-400" />
-            <span>Day-Ahead Decision Cutoff & Zero Look-Ahead Bias</span>
+        {/* 1. D-1 Decision Cutoff & Zero Look-Ahead Bias */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+          <div className="flex items-center space-x-2.5 font-bold text-slate-200 text-sm border-b border-slate-800 pb-3">
+            <Clock className="h-5 w-5 text-amber-400" />
+            <span>1. Day-Ahead Decision Gate & Look-Ahead Prevention</span>
           </div>
-          <p className="text-slate-400 leading-relaxed text-[11px]">
-            To mirror real-world power procurement decisions, forecasts must be evaluated using only information that was genuinely published and available at the gate closure cutoff.
+          <p className="text-slate-300 leading-relaxed text-[12px]">
+            To provide an honest evaluation of real-world procurement decisions, the platform reproduces the exact information environment available to traders when day-ahead auction bids were submitted:
           </p>
-          <ul className="list-disc pl-4 space-y-1.5 text-slate-300 text-[11px]">
-            <li>
-              <strong>Configurable Cutoff:</strong> Defaults to <code className="text-amber-300 font-mono">11:00 Europe/London</code> on Day Ahead (D-1), representing standard day-ahead procurement deadlines before EPEX/Nord Pool auctions.
+          <ul className="space-y-2.5 text-slate-300 text-[11px]">
+            <li className="flex items-start space-x-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 mt-1.5 flex-shrink-0"></span>
+              <span>
+                <strong className="text-white">Day-Ahead Decision Gate (D-1):</strong> Order books on major wholesale power exchanges (EPEX SPOT and Nord Pool) close during the late morning on the day preceding delivery. The platform defaults to an <strong>11:00 Europe/London (GMT)</strong> decision cutoff.
+              </span>
             </li>
-            <li>
-              <strong>Date-Specific Evaluation:</strong> Multi-day ranges evaluate each delivery date under its respective D-1 cutoff (e.g. Jan 1 uses Dec 31 11:00 UTC, Jan 2 uses Jan 1 11:00 UTC).
+            <li className="flex items-start space-x-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 mt-1.5 flex-shrink-0"></span>
+              <span>
+                <strong className="text-white">Strict Vintage Selection Rule:</strong> For any delivery hour on date $D$, the engine queries all WINDFOR publication vintages and selects the latest revision satisfying <code className="text-amber-300 font-mono">publish_timestamp &le; decision_cutoff(D-1)</code> and <code className="text-amber-300 font-mono">publish_timestamp &le; delivery_timestamp</code>.
+              </span>
             </li>
-            <li>
-              <strong>Strict Selection Rule:</strong> For any delivery interval, the engine selects the latest forecast vintage where <code className="text-cyan-300 font-mono">publish_timestamp &le; decision_cutoff_utc</code>.
-            </li>
-            <li>
-              <strong>Look-Ahead Prevention:</strong> Retrospective vintages and forecasts published after the cutoff are rigorously excluded.
+            <li className="flex items-start space-x-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 mt-1.5 flex-shrink-0"></span>
+              <span>
+                <strong className="text-white">Zero Look-Ahead Bias:</strong> Revisions published after the cutoff (or during physical delivery) are strictly disqualified. If no forecast was published prior to cutoff, the interval is reported as unavailable—never forward-substituted.
+              </span>
             </li>
           </ul>
         </div>
 
-        {/* 2. Error Sign Convention */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg space-y-3">
-          <div className="flex items-center space-x-2 font-bold text-slate-200 text-sm border-b border-slate-800 pb-2">
-            <Target className="h-4 w-4 text-cyan-400" />
-            <span>Error Sign Convention</span>
+        {/* 2. Error Sign Convention & Imbalance Impact */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+          <div className="flex items-center space-x-2.5 font-bold text-slate-200 text-sm border-b border-slate-800 pb-3">
+            <Target className="h-5 w-5 text-cyan-400" />
+            <span>2. Forecast Error Convention & Balancing Exposure</span>
           </div>
-          <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-center font-mono font-bold text-cyan-300 text-sm">
+          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center font-mono font-bold text-cyan-300 text-sm">
             forecast_error_mw = forecast_generation_mw − actual_generation_mw
           </div>
-          <p className="text-slate-400 leading-relaxed text-[11px]">
-            The error sign directly communicates the direction of physical system imbalance:
+          <p className="text-slate-300 leading-relaxed text-[12px]">
+            The mathematical sign of the forecast error directly reflects the physical position of a procurement portfolio:
           </p>
-          <div className="grid grid-cols-2 gap-2 text-[11px]">
-            <div className="bg-amber-950/30 border border-amber-800/40 p-2.5 rounded-lg">
-              <span className="font-bold text-amber-400">Positive Error (+MW)</span>
-              <p className="text-slate-300 mt-0.5">
-                <strong>Overforecasting:</strong> Forecast exceeded delivered actuals. Implies potential deficit in real-time if procurement matched forecast.
+          <div className="space-y-3 pt-1">
+            <div className="bg-amber-950/30 border border-amber-800/50 p-3.5 rounded-xl space-y-1">
+              <span className="font-bold text-amber-400 text-xs flex items-center space-x-1.5">
+                <span>Positive Error (+MW) = Overforecasting</span>
+              </span>
+              <p className="text-slate-300 text-[11px] leading-relaxed">
+                National Grid predicted more wind than actually materialized. A procurement desk relying on this forecast will experience a <strong>short volume position</strong> in real time, forcing them to buy emergency balancing power at potentially exorbitant System Buy Prices.
               </p>
             </div>
-            <div className="bg-blue-950/30 border border-blue-800/40 p-2.5 rounded-lg">
-              <span className="font-bold text-blue-400">Negative Error (−MW)</span>
-              <p className="text-slate-300 mt-0.5">
-                <strong>Underforecasting:</strong> Actual generation exceeded forecast. Implies long position in real-time.
+            <div className="bg-blue-950/30 border border-blue-800/50 p-3.5 rounded-xl space-y-1">
+              <span className="font-bold text-blue-400 text-xs flex items-center space-x-1.5">
+                <span>Negative Error (−MW) = Underforecasting</span>
+              </span>
+              <p className="text-slate-300 text-[11px] leading-relaxed">
+                Physical wind output exceeded expectations. The desk over-contracted expensive thermal generation, resulting in a <strong>long volume position</strong> that must "spill" back onto the system.
               </p>
             </div>
           </div>
         </div>
 
         {/* 3. Resolution Bridge */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg space-y-3">
-          <div className="flex items-center space-x-2 font-bold text-slate-200 text-sm border-b border-slate-800 pb-2">
-            <Layers className="h-4 w-4 text-indigo-400" />
-            <span>Hourly-to-Half-Hourly Resolution Bridge</span>
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+          <div className="flex items-center space-x-2.5 font-bold text-slate-200 text-sm border-b border-slate-800 pb-3">
+            <Layers className="h-5 w-5 text-indigo-400" />
+            <span>3. Hourly to Half-Hourly Resolution Alignment</span>
           </div>
-          <p className="text-slate-400 leading-relaxed text-[11px]">
-            UK market physical settlement operates on 30-minute settlement periods (SP 1–48), whereas NESO WINDFOR forecasts are published in 1-hour blocks:
+          <p className="text-slate-300 leading-relaxed text-[12px]">
+            In the Great Britain market, physical electricity generation is measured and settled in <strong>48 half-hour settlement periods</strong> (FUELHH). In contrast, National Grid's day-ahead forecasts (WINDFOR) are published at <strong>1-hour intervals</strong>.
           </p>
-          <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-[11px] space-y-1">
-            <div className="text-slate-400">Example matching for 10:00:</div>
-            <div className="text-amber-400">WINDFOR 10:00 Forecast (1 hr) ───┐</div>
-            <div className="text-cyan-400 pl-4">├── SP 21 (10:00–10:30 Actual)</div>
-            <div className="text-cyan-400 pl-4">└── SP 22 (10:30–11:00 Actual)</div>
+          <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 font-mono text-[11px] space-y-1.5">
+            <div className="text-slate-400 font-sans font-medium">Standard Resolution Mapping:</div>
+            <div className="text-amber-400">WINDFOR 14:00 Forecast (1 Hour Block) ──────┐</div>
+            <div className="text-cyan-400 pl-4">├── Settlement Period 29 (14:00–14:30 Actual Outturn)</div>
+            <div className="text-cyan-400 pl-4">└── Settlement Period 30 (14:30–15:00 Actual Outturn)</div>
           </div>
-          <p className="text-slate-400 text-[11px]">
-            Comparison rows and accuracy metrics operate on the 30-minute half-hourly level. A 2-day period features 48 unique hourly forecasts covering 96 half-hourly comparison rows.
+          <p className="text-slate-400 text-[11px] leading-relaxed">
+            Our alignment bridge floors each 30-minute interval to its enclosing forecast hour. Accuracy metrics (MAE, RMSE, Bias, MAPE) operate on matched 30-minute settlement rows to preserve exact alignment with balancing cash-out timeframes.
           </p>
         </div>
 
-        {/* 4. Safe MAPE & Missing Data Integrity */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg space-y-3">
-          <div className="flex items-center space-x-2 font-bold text-slate-200 text-sm border-b border-slate-800 pb-2">
-            <CheckCircle className="h-4 w-4 text-emerald-400" />
-            <span>Safe MAPE & Missing Data Integrity</span>
+        {/* 4. Safe MAPE & Zero Imputation Policy */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+          <div className="flex items-center space-x-2.5 font-bold text-slate-200 text-sm border-b border-slate-800 pb-3">
+            <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+            <span>4. Safe Percentage Error & Missing Data Policy</span>
           </div>
-          <ul className="list-disc pl-4 space-y-2 text-slate-300 text-[11px]">
-            <li>
-              <strong>Zero-Actual Exclusion:</strong> Mean Absolute Percentage Error (MAPE) divides by actual generation (<code className="font-mono text-cyan-300">|error| / |actual|</code>). Intervals with <code className="font-mono text-cyan-300">actual == 0 MW</code> are safely excluded from MAPE to avoid division by zero.
+          <p className="text-slate-300 leading-relaxed text-[12px]">
+            Statistical integrity is maintained through rigorous edge-case handling:
+          </p>
+          <ul className="space-y-2.5 text-slate-300 text-[11px]">
+            <li className="flex items-start space-x-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
+              <span>
+                <strong className="text-white">Safe MAPE (Zero-Actual Protection):</strong> Calculating percentage error requires dividing by actual generation (<code className="font-mono text-cyan-300">|error| / actual</code>). When wind drops to zero (0 MW outturn), division by zero is mathematically undefined. The platform safely excludes zero-actual intervals from percentage summation, while fully maintaining them in MAE and RMSE.
+              </span>
             </li>
-            <li>
-              <strong>Retained in MAE & RMSE:</strong> Intervals with 0 MW actual are well-defined in absolute terms and remain fully included in MAE, RMSE, and Bias.
+            <li className="flex items-start space-x-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
+              <span>
+                <strong className="text-white">Never Coerce Missing Data to Zero:</strong> If an interval is missing from the Elexon feed, it remains <code className="text-slate-400 font-mono">null</code>. It is never replaced with 0 MW or smoothed over with synthetic interpolation.
+              </span>
             </li>
-            <li>
-              <strong>No Zero Coercion:</strong> Intervals missing either actual or forecast data are excluded from metric denominators and never coerced to 0 MW.
-            </li>
-            <li>
-              <strong>Full Vintage Preservation:</strong> Elexon WINDFOR forecasts are stored without overwriting historical publication revisions.
+            <li className="flex items-start space-x-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
+              <span>
+                <strong className="text-white">Transparent Denominators:</strong> Every API response and UI card explicitly states the exact number of evaluated intervals and excluded observations.
+              </span>
             </li>
           </ul>
         </div>

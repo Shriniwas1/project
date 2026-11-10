@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getForecasts } from '../../services/api';
-import { Wind, Calendar, Clock, Filter, AlertCircle, RefreshCw, CheckCircle, Info } from 'lucide-react';
+import { Wind, Calendar, Clock, Filter, AlertCircle, RefreshCw, CheckCircle2, Info, ArrowUpRight, History } from 'lucide-react';
 
 export default function ForecastVintagesView({ initialStartDate = '2026-01-01', initialEndDate = '2026-01-02' }) {
   const [startDate, setStartDate] = useState(initialStartDate);
@@ -36,66 +36,77 @@ export default function ForecastVintagesView({ initialStartDate = '2026-01-01', 
 
   return (
     <div className="space-y-6">
-      {/* Title & Explainer */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+      {/* Title & Human Explainer */}
+      <section className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-7 shadow-xl space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
           <div>
-            <h1 className="text-xl font-bold text-white flex items-center space-x-2">
-              <Wind className="h-5 w-5 text-amber-400" />
-              <span>Forecast Publication Vintages (WINDFOR)</span>
-            </h1>
-            <p className="text-xs text-slate-400 mt-1">
-              Multi-vintage inspection engine preserving all historical publication revisions for UK national wind generation
+            <div className="flex items-center space-x-2.5">
+              <div className="p-1.5 rounded-lg bg-amber-950/80 border border-amber-800/60 text-amber-400">
+                <History className="h-5 w-5" />
+              </div>
+              <h1 className="text-xl font-bold text-white tracking-tight">
+                Forecast Publication Vintages (WINDFOR Explorer)
+              </h1>
+            </div>
+            <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
+              Explore how National Grid ESO forecast revisions evolved over time prior to delivery. National Grid ESO publishes updated forecast batches multiple times per day. Every historical publication vintage is preserved in our database without overwriting.
             </p>
           </div>
-          <div className="flex items-center space-x-2 text-xs text-slate-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Resolution: Native 1-Hour</span>
+          <div className="flex items-center space-x-2 text-xs text-slate-300 bg-slate-950 px-3.5 py-2 rounded-xl border border-slate-800 self-start sm:self-auto">
+            <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
+            <span className="font-medium">Multi-Vintage Repository Active</span>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end mt-4">
-          <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">Start Date</label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-slate-300">Delivery Start Date</label>
             <input
               type="date"
+              min="2026-01-01"
+              max="2026-01-31"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500"
+              className="w-full bg-slate-950/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
             />
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">End Date</label>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-slate-300">Delivery End Date</label>
             <input
               type="date"
+              min="2026-01-01"
+              max="2026-01-31"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500"
+              className="w-full bg-slate-950/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
             />
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">Filter Publish Before (Optional)</label>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-slate-300">
+              <span>Upper Publish Cutoff</span>
+              <span className="text-[10px] text-slate-500 font-normal ml-1">(Optional ISO)</span>
+            </label>
             <input
               type="text"
               placeholder="e.g. 2025-12-31T11:00:00Z"
               value={publishBefore}
               onChange={(e) => setPublishBefore(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500 font-mono"
+              className="w-full bg-slate-950/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500/50 font-mono"
             />
           </div>
 
           <div className="flex items-center pb-2">
-            <label className="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer select-none">
+            <label className="flex items-center space-x-2.5 text-xs text-slate-300 cursor-pointer select-none bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 hover:border-slate-700 transition-all w-full">
               <input
                 type="checkbox"
                 checked={latestOnly}
                 onChange={(e) => setLatestOnly(e.target.checked)}
-                className="rounded bg-slate-950 border-slate-700 text-amber-500 focus:ring-amber-500 h-4 w-4"
+                className="rounded bg-slate-900 border-slate-700 text-amber-500 focus:ring-amber-500 h-4 w-4"
               />
-              <span>Latest Vintage Only</span>
+              <span className="font-medium">Show Latest Vintage Only</span>
             </label>
           </div>
 
@@ -104,91 +115,92 @@ export default function ForecastVintagesView({ initialStartDate = '2026-01-01', 
               type="button"
               onClick={fetchData}
               disabled={loading}
-              className="w-full bg-amber-600 hover:bg-amber-500 text-slate-950 font-semibold px-4 py-2 rounded-lg text-xs transition-all flex items-center justify-center space-x-2 shadow-md shadow-amber-900/20 disabled:opacity-50"
+              className="w-full bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs transition-all flex items-center justify-center space-x-2 shadow-md shadow-amber-950/40 disabled:opacity-50"
             >
-              <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
               <span>{loading ? 'Fetching...' : 'Query Vintages'}</span>
             </button>
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center justify-between text-xs text-slate-400 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80">
+        {/* Informative Status Strip */}
+        <div className="flex flex-wrap items-center justify-between text-xs text-slate-400 bg-slate-950/70 p-3 rounded-xl border border-slate-800">
           <div className="flex items-center space-x-2">
-            <Info className="h-3.5 w-3.5 text-amber-400" />
+            <Info className="h-4 w-4 text-amber-400" />
             <span>
               {latestOnly
-                ? 'Displaying only the single latest publication vintage per 1-hour interval.'
-                : 'Displaying all historical publication vintages stored for each delivery interval.'}
+                ? 'Showing single most recent publication vintage for each 1-hour interval.'
+                : 'Displaying complete chronological vintage history (multiple revisions per delivery interval).'}
             </span>
           </div>
-          <div className="font-mono text-slate-300">
-            Records: <span className="text-amber-400 font-bold">{data?.record_count ?? 0}</span> | Distinct Intervals:{' '}
-            <span className="text-cyan-400 font-bold">{data?.unique_delivery_intervals_count ?? 0}</span>
+          <div className="font-sans text-slate-300">
+            Total Retrieved Vintages: <strong className="text-amber-400 font-mono text-sm">{data?.record_count ?? 0}</strong> across{' '}
+            <strong className="text-cyan-400 font-mono text-sm">{data?.unique_delivery_intervals_count ?? 0}</strong> unique delivery hours
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Error state */}
       {error && (
-        <div className="bg-rose-950/40 border border-rose-800 rounded-xl p-4 text-xs text-rose-300 flex items-center space-x-3">
+        <div className="bg-rose-950/40 border border-rose-800 rounded-2xl p-4 text-xs text-rose-300 flex items-center space-x-3">
           <AlertCircle className="h-5 w-5 text-rose-400 flex-shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {/* Table / Empty State */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
         {loading ? (
-          <div className="p-12 text-center text-slate-500 text-sm">
-            <RefreshCw className="h-6 w-6 text-amber-500 animate-spin mx-auto mb-2" />
-            <span>Loading forecast vintages...</span>
+          <div className="p-16 text-center text-slate-400 text-sm space-y-3">
+            <RefreshCw className="h-7 w-7 text-amber-500 animate-spin mx-auto" />
+            <p className="font-medium text-slate-300">Querying multi-vintage forecast archive...</p>
           </div>
         ) : !data || data.records.length === 0 ? (
-          <div className="p-12 text-center">
-            <Wind className="h-10 w-10 text-slate-600 mx-auto mb-3" />
-            <h3 className="text-sm font-semibold text-slate-300">No Forecast Records Found</h3>
-            <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-              No WINDFOR forecasts match the requested delivery date range. Ensure January 2026 data has been ingested into SQLite.
+          <div className="p-16 text-center space-y-3">
+            <Wind className="h-10 w-10 text-slate-600 mx-auto" />
+            <h3 className="text-base font-semibold text-slate-200">No Forecast Vintages Found</h3>
+            <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+              No WINDFOR forecasts match your date criteria. Select delivery dates in January 2026.
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+          <div className="overflow-x-auto max-h-[640px] overflow-y-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-950/80 text-slate-400 font-semibold border-b border-slate-800 sticky top-0 backdrop-blur z-10">
+              <thead className="bg-slate-950/90 text-slate-300 font-semibold border-b border-slate-800 sticky top-0 backdrop-blur-md z-10">
                 <tr>
-                  <th className="px-4 py-3">Delivery Interval (UTC)</th>
-                  <th className="px-4 py-3">Delivery Date</th>
-                  <th className="px-4 py-3">Publication Timestamp (UTC)</th>
-                  <th className="px-4 py-3 text-right">Forecast (MW)</th>
-                  <th className="px-4 py-3 text-right">Lead Time</th>
-                  <th className="px-4 py-3 text-center">Status</th>
-                  <th className="px-4 py-3">Source</th>
+                  <th className="px-5 py-3.5">Delivery Interval (UTC)</th>
+                  <th className="px-5 py-3.5">Delivery Date</th>
+                  <th className="px-5 py-3.5">Publication Vintage (UTC)</th>
+                  <th className="px-5 py-3.5 text-right">Predicted Generation</th>
+                  <th className="px-5 py-3.5 text-right">Lead Time</th>
+                  <th className="px-5 py-3.5 text-center">Ex-Ante Status</th>
+                  <th className="px-5 py-3.5">Elexon Stream</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60 font-mono text-slate-300">
                 {data.records.map((r, idx) => (
                   <tr key={idx} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="px-4 py-2.5 text-cyan-400 font-semibold">{r.delivery_timestamp}</td>
-                    <td className="px-4 py-2.5 text-slate-400">{r.delivery_date}</td>
-                    <td className="px-4 py-2.5 text-amber-300">{r.publish_timestamp}</td>
-                    <td className="px-4 py-2.5 text-right font-bold text-white">
+                    <td className="px-5 py-3 text-cyan-300 font-medium">{r.delivery_timestamp}</td>
+                    <td className="px-5 py-3 text-slate-400 font-sans">{r.delivery_date}</td>
+                    <td className="px-5 py-3 text-amber-300">{r.publish_timestamp}</td>
+                    <td className="px-5 py-3 text-right font-bold text-white text-sm">
                       {Number(r.generation_mw).toLocaleString(undefined, { minimumFractionDigits: 1 })} MW
                     </td>
-                    <td className="px-4 py-2.5 text-right text-slate-400">
+                    <td className="px-5 py-3 text-right text-slate-400 font-sans">
                       {r.lead_time_hours !== null ? `${r.lead_time_hours.toFixed(1)} hrs` : '—'}
                     </td>
-                    <td className="px-4 py-2.5 text-center">
+                    <td className="px-5 py-3 text-center font-sans">
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${
                           r.is_ex_ante
                             ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/60'
                             : 'bg-amber-950/80 text-amber-400 border border-amber-800/60'
                         }`}
                       >
-                        {r.is_ex_ante ? 'Ex-Ante' : 'Retrospective'}
+                        {r.is_ex_ante ? 'Ex-Ante (Ahead)' : 'Retrospective (Anchor)'}
                       </span>
                     </td>
-                    <td className="px-4 py-2.5 text-slate-500 text-[11px]">{r.source}</td>
+                    <td className="px-5 py-3 text-slate-500 font-sans text-[11px]">{r.source}</td>
                   </tr>
                 ))}
               </tbody>
