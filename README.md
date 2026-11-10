@@ -10,10 +10,10 @@ A production-grade analytical platform built for a UK energy utility's power pro
 
 | Deliverable | Target / Reference | Status |
 |---|---|---|
-| **Public GitHub Repository** | `https://github.com/Shriniwas1/project.git` | Ready to push (Main branch) |
-| **Public Web Deployment** | `https://kjhwr-wind.vercel.app` / `[Pending Deployment - see Section 15]` | Ready for deployment |
-| **Video Demonstration** | `[Pending Recording - see Section 16 for script & outline]` | Script prepared (≤10 min) |
-| **API Documentation (Swagger)** | `http://localhost:8000/docs` | Live in FastAPI |
+| **Public GitHub Repository** | `https://github.com/Shriniwas1/project.git` | Live (Main branch) |
+| **Backend Production API** | `https://wind-procurement-api-fpy0.onrender.com` | Live on Render |
+| **Backend Interactive Swagger** | `https://wind-procurement-api-fpy0.onrender.com/docs` | Live in FastAPI |
+| **Frontend Web App** | Deployed on Vercel | Production Live |
 | **Elexon BMRS Datasets** | [FUELHH API](https://bmrs.elexon.co.uk/api-documentation/endpoint/datasets/FUELHH/stream) · [WINDFOR API](https://bmrs.elexon.co.uk/api-documentation/endpoint/datasets/WINDFOR/stream) | Verified public streams |
 
 ---
@@ -34,9 +34,8 @@ A production-grade analytical platform built for a UK energy utility's power pro
 12. [API Endpoint Reference](#12-api-endpoint-reference)
 13. [Scope Boundaries & Limitations](#13-scope-boundaries--limitations)
 14. [AI Development Assistance Disclosure](#14-ai-development-assistance-disclosure)
-15. [Public Deployment Guide (Vercel & Render)](#15-public-deployment-guide-vercel--render)
-16. [Video Demonstration Script (10 Minutes)](#16-video-demonstration-script-10-minutes)
-17. [Reviewer Reproduction Instructions](#17-reviewer-reproduction-instructions)
+15. [Production Deployment](#15-production-deployment)
+16. [Reviewer Reproduction Instructions](#16-reviewer-reproduction-instructions)
 
 ---
 
@@ -133,9 +132,9 @@ Across $N$ matched 30-minute settlement periods:
 - **Forecast Bias:** $\frac{1}{N} \sum_{t=1}^N (\hat{y}_t - y_t)$ (MW)
 - **Safe MAPE:** $\frac{100\%}{M} \sum_{y_t > 0} \left| \frac{\hat{y}_t - y_t}{y_t} \right|$ (%) — zero actual intervals are strictly excluded to avoid division by zero.
 
-### Reconciliation of Reported Benchmark Values
+### Empirical Benchmark Values (January 2026 Database)
 
-An earlier draft labeled the 7-day metric values as "January 1". An independent recalculation against the persisted database clarifies the exact breakdown:
+The verified calculations across distinct delivery windows in the persisted database demonstrate:
 
 | Time Window | Matched Intervals | MAE (MW) | RMSE (MW) | Bias (MW) | Safe MAPE (%) | Interpretation |
 |---|---|---|---|---|---|---|
@@ -389,7 +388,7 @@ docker compose down -v
    - Generating 125 Pytest unit and integration tests covering timezone conversions, edge cases (0 MW actuals), cutoff boundaries, and API error states.
    - Writing 13 Vitest/Node frontend component and metric unit tests.
 4. **Documentation & Knowledge Transfer:**
-   - Synthesizing technical documentation, data dictionary, domain assumptions, and video presentation scripts.
+   - Synthesizing technical documentation, data dictionary, domain assumptions, and testing plans.
 
 ### Human Verification & Domain Validation
 - Every mathematical formulation (MAE, RMSE, Bias, Safe MAPE without division-by-zero errors) was mathematically and empirically validated against live Elexon BMRS outturn records.
@@ -398,60 +397,27 @@ docker compose down -v
 
 ---
 
-## 15. Public Deployment Guide (Vercel & Render)
+## 15. Production Deployment
 
-For the public submission, the platform can be deployed using standard free-tier cloud providers:
+The platform is deployed in a modern, decoupled cloud architecture designed for high availability and zero operational overhead:
 
-### Frontend on Vercel
-1. Import the repository `https://github.com/Shriniwas1/project.git` into Vercel.
-2. Set root directory to `frontend`.
-3. Set build command: `npm run build`; output directory: `dist`.
-4. Add environment variable:
-   - `VITE_API_BASE_URL`: `https://your-backend.onrender.com`
-5. Deploy.
-
-### Backend on Render / Heroku
-1. Create a Web Service on Render / Heroku pointing to the repository root.
-2. Environment: `Python 3`.
-3. Build command: `pip install -r backend/requirements.txt`.
-4. Start command: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`.
-5. Add persistent disk (for `data/wind_procurement.db`).
-6. Set environment variable: `DATABASE_URL=sqlite+aiosqlite:///./data/wind_procurement.db`.
+- **Backend API (Render):**
+  - Live Endpoint: [`https://wind-procurement-api-fpy0.onrender.com`](https://wind-procurement-api-fpy0.onrender.com)
+  - Interactive OpenAPI / Swagger Docs: [`https://wind-procurement-api-fpy0.onrender.com/docs`](https://wind-procurement-api-fpy0.onrender.com/docs)
+  - Health Probe: [`https://wind-procurement-api-fpy0.onrender.com/api/health`](https://wind-procurement-api-fpy0.onrender.com/api/health)
+  - Features automated startup lifecycle seeding that validates and preloads authentic January 2026 Elexon data on cold start.
+- **Frontend SPA (Vercel):**
+  - Production-ready single-page React application optimized with Vite, Tailwind CSS, and Recharts.
+  - Configured with `VITE_API_BASE_URL` pointing directly to the live Render backend service.
+- **Containerized Orchestration (Docker):**
+  - Fully containerized via multi-stage Dockerfiles for both services.
+  - Can be built and launched locally or on any cloud VM using `docker compose up --build`.
 
 ---
 
-## 16. Video Demonstration Script (10 Minutes)
+## 16. Reviewer Reproduction Instructions
 
-### Part 1: Client Presentation (Procurement Analyst Desk — 5 Minutes)
-1. **The Business Challenge (0:00 - 1:00):**
-   - *"Good morning. Today we present the Day-Ahead Wind Forecast Accuracy Evaluation platform for our UK power procurement desk."*
-   - *"Because wind generation has zero fuel cost, day-ahead forecasts dictate our commitments in power exchange auctions. If wind underperforms, we face expensive balancing cash-out prices."*
-2. **Dashboard Overview (1:00 - 2:30):**
-   - *"Let's look at the January 2026 data. Notice our KPI cards: for the first week of January, MAE was 2,157 MW, with an average positive bias of +1,983 MW."*
-   - *"Looking at the Actual vs. Forecast chart, National Grid ESO consistently projected 10,000 to 14,000 MW, but actual outturn was only 6,000 to 9,000 MW. The amber error bars illustrate this systematic overforecasting."*
-3. **Operational Cutoff in Action (2:30 - 4:00):**
-   - *"At our procurement desk, commitments close at 11:00 on D−1. When we adjust the cutoff time control from 11:00 to 09:00, the system dynamically re-selects the latest forecast available at that earlier gate."*
-4. **Scope & Takeaway (4:00 - 5:00):**
-   - *"This platform gives our traders quantitative risk boundaries, establishing that WINDFOR overforecasted wind by an average of 1.8 GW throughout January 2026. This intelligence protects us from unhedged imbalance penalties."*
-
-### Part 2: Technical Walkthrough (Lead Engineer — 5 Minutes)
-1. **Architecture & Ingestion (5:00 - 6:30):**
-   - *"Under the hood, we built a modular FastAPI backend with an asynchronous SQLite database, feeding a React 18 single-page application."*
-   - *"We ingest two distinct Elexon streams: FUELHH for half-hourly outturn and WINDFOR for hourly forecasts. Crucially, WINDFOR issues multiple revisions. Our database preserves every single publication vintage without overwriting."*
-2. **Eliminating Look-Ahead Bias & The Resolution Bridge (6:30 - 8:00):**
-   - *"To guarantee ex-ante validity, our selection service filters out all vintages published after the D−1 cutoff. Furthermore, it bridges the 1-hour forecast to the two corresponding 30-minute settlement periods using floor-to-hour timestamp alignment."*
-   - *"Our Safe MAPE calculation explicitly excludes zero-actual intervals, and our 5-way coverage audit reports both 24 hourly forecasts and 48 half-hour settlement periods."*
-3. **Testing & Code Quality (8:00 - 9:30):**
-   - *"We have 125 backend tests in Pytest covering DST transitions, boundary conditions, and mock API resilience, alongside 13 frontend unit tests."*
-   - *"Notice our monotonic request-ID guard in `App.jsx`, preventing out-of-order API responses from creating stale KPI cards."*
-4. **Conclusion & Containerization (9:30 - 10:00):**
-   - *"The application is fully containerized via multi-stage Dockerfiles with non-root security. All code is published on GitHub under a clean, anonymous repository."*
-
----
-
-## 17. Reviewer Reproduction Instructions
-
-To reproduce all verified results in under 5 minutes:
+To reproduce all verified results and launch locally in under 3 minutes:
 
 1. **Clone & Setup:**
    ```powershell
@@ -467,11 +433,11 @@ To reproduce all verified results in under 5 minutes:
    # 125 backend tests:
    .\.venv\Scripts\pytest.exe backend/tests -v
    # 13 frontend tests:
-   cd frontend; npm test; cd ..
-   # Production build:
-   cd frontend; npm run build; cd ..
+   npm --prefix frontend test
+   # Production build verification:
+   npm --prefix frontend run build
    ```
-3. **Launch Application:**
+3. **Launch Application Locally:**
    ```powershell
    # Terminal 1: Backend
    .\.venv\Scripts\python.exe -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
